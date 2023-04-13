@@ -1,10 +1,6 @@
 """
-File: MT_Lq1.py(京东宝藏榜)
-Author: HarbourJ
-Date: 2022/9/19 22:00
 cron: 0 10 * * *
 new Env('MT30-15');
-ActivityEntry: 首页排行榜-宝藏榜
 """
 
 import requests
