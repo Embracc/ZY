@@ -1,3 +1,7 @@
+"""
+cron: 0 10 * * *
+new Env('NN加速器');
+"""
 import hashlib
 import json
 from time import sleep
