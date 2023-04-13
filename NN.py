@@ -83,7 +83,7 @@ def login(phone, passwd):
 
 
 accounts = {}
-account_str = os.environ.get('nnjsq')
+account_str = os.environ.get('NN')
 if account_str:
     for i, account in enumerate(account_str.split('@')):
         username, userpass = account.split(':')
