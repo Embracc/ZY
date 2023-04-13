@@ -1,6 +1,6 @@
 """
 cron: 0 10 * * *
-new Env('MT30-15');
+new Env('美团30-15');
 """
 
 import requests
