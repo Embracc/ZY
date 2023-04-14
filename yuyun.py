@@ -123,8 +123,8 @@ class RainYun():
 if __name__ == '__main__':
     accounts = [
         {
-            "user": "1791974246@qq.com",  # 账户
-            "password": "yuyun0147"  # 密码
+            "user": os.environ['yuyun'].split('@')[0],
+            "password": os.environ['yuyun'].split('@')[1]
         }
     ]
     for acc in accounts:
