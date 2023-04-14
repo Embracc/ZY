@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 cron: 0 0 23 * * ?
-new Env('NN加速器');
+new Env('雨云挂机');
 """
 import requests
 from datetime import datetime, timedelta, timezone
