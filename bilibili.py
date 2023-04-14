@@ -1,6 +1,6 @@
 """
-core function for scripts
-corn : 1 0 * * *
+cron: 1 0 * * *
+new Env('bilibili');
 """
 
 import requests
