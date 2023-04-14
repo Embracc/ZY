@@ -11,7 +11,7 @@ headers = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36 Edg/110.0.1587.69"
 }
 # 域名请自行解码
-domain = "aHR0cHM6Ly93d3cuamF2YXh4ei5jb20="
+domain = "https://www.javaxxz.com/"
 # 这样开着代{过}{滤}理的时候不会报连接错误  方便测试
 os.environ['NO_PROXY'] = domain
 #在 https://www.pushplus.plus 免费获取
