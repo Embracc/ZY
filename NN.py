@@ -1,5 +1,5 @@
 """
-cron: 0 10 * * *
+cron: 1 0 * * *
 new Env('NN加速器');
 """
 import hashlib
