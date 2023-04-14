@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
-cron: 0 0 23 * * ?
-new Env('雨云挂机');
+cron: 59 59 19 * * *
+new Env('雨云抢香港机');
 """
 import requests
 from datetime import datetime, timedelta, timezone
