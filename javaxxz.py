@@ -1,3 +1,7 @@
+"""
+cron: 1 0 * * *
+new Env('java学习者');
+"""
 import base64
 import sys
 import requests
