@@ -1,4 +1,8 @@
 # -*- coding: utf-8 -*-
+"""
+cron: 0 0 23 * * ?
+new Env('NN加速器');
+"""
 import requests
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
