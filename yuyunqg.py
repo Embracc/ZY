@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
-cron: 59 59 19 * * *
-new Env('雨云抢香港机');
+cron: 0 0 23 * * ?
+new Env('雨云挂机');
 """
 import requests
 from datetime import datetime, timedelta, timezone
@@ -25,10 +25,6 @@ class RainYun():
             "field": self.user,
             "password": self.pwd,
         })
-        self.data = {
-            "item_id": 107
-        }
-        
         # 日志输出
         self.logger = logging.getLogger(self.user)
         formatter = logging.Formatter(datefmt='%Y/%m/%d %H:%M:%S',
@@ -47,10 +43,9 @@ class RainYun():
             "Referer": "https://api.rainyun.cc"
         })
         self.login_url = "https://api.v2.rainyun.cc:36688/user/login"
-        self.signin_url = "https://api.v2.rainyun.cc:36688/user/reward/tasks"
         self.logout_url = "https://api.v2.rainyun.cc:36688/user/logout"
-        self.query_url = "https://api.v2.rainyun.cc:36688/user/"
         self.items_url = "https://api.v2.rainyun.cc:36688/user/reward/items"
+
         # 忽略 .cc ssl错误
         self.session.verify = False
 
@@ -60,29 +55,69 @@ class RainYun():
             url=self.login_url, headers={"Content-Type": "application/json"}, data=self.json_data)
         if res.text.find("200") > -1:
             self.logger.info("登录成功")
-            csrf_token = res.cookies.get("X-CSRF-Token", "")
             self.session.headers.update({
-                "X-CSRF-Token": csrf_token
+                "X-CSRF-Token": res.cookies.get("X-CSRF-Token", "")
             })
-            self.logger.info(f"获取到的Token为: {csrf_token}")
+            self.token = res.cookies.get("X-CSRF-Token", "")
+            self.cookies = res.cookies  # 将响应中的 Cookie 存储到 self.cookies 变量中
+            self.logger.info(f"获取到的Token为: {self.token}")
+            self.session.headers.update({"X-CSRF-Token": self.token})
+            res = self.session.post(
+            url=self.items_url, headers={"Content-Type": "application/json", "x-csrf-token": self.token, "cookie": acc.get("cookie")}, data={"item_id": 107})
+
+
+            self.logger.info(f"抢了一次，响应信息：{res.text}")
         else:
             self.logger.error(f"登录失败，响应信息：{res.text}")
 
-    
+    def logout(self) -> None:
+        res = self.session.post(url=self.logout_url)
+        if res.text.find("200") > -1:
+            self.logger.info('已退出登录')
+        else:
+            self.logger.warning(f"退出登录时出了些问题，响应信息：{res.text}")
+
+
+
+    def log(self, log_file: str, max_num=5) -> None:
+        """存储本次签到结果的日志"""
+        # 北京时间
+        time_string = self.signin_date.replace(tzinfo=timezone.utc).astimezone(
+            timezone(timedelta(hours=8))).strftime("%Y/%m/%d %H:%M:%S")
+        file = Path(log_file)
+        record = {
+            "date": time_string,
+            "result": self.signin_result,
+            "points": self.points
+        }
+        previous_records = {}
+        if file.is_file():
+            try:
+                with open(log_file, 'r') as f:
+                    previous_records = json.load(f)
+                if not previous_records.get(self.user):
+                    previous_records[self.user] = []
+                previous_records[self.user].insert(0, record)
+                previous_records[self.user] = previous_records[self.user][:max_num]
+            except Exception as e:
+                self.logger.error("序列化日志时出错："+repr(e))
+        else:
+            previous_records[self.user] = [record]
+        with open(log_file, 'w', encoding='utf-8') as f:
+            json.dump(previous_records, f, indent=4)
+        self.logger.info('日志保存成功')
+
 
 if __name__ == '__main__':
     accounts = [
         {
             "user": os.environ['yuyun'].split('@')[0],
-            "password": os.environ['yuyun'].split('@')[1]
+            "password": os.environ['yuyun'].split('@')[1],
+            "cookie" : os.environ['yycookie']
         }
     ]
     for acc in accounts:
         ry = RainYun(acc["user"], acc["password"])  # 实例
         ry.login()  # 登录
         ry.logout()  # 登出
-        # 保存日志则打开注释 推荐文件绝对路径
-        # file = "./rainyun-signin-log.json"
-        # 日志最大记录数量
-        # max_num = 5
-        # ry.log(file, max_num)  # 保存日志
+
