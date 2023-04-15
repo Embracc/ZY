@@ -8,18 +8,19 @@ new Env('爱奇艺签到');
 2.cookie获取方式
     1.cookie可以用别人loon、qx等软件的mitm类自动获取再去boxjs里复制出来填写到环境变量或本脚本中
     2.也可以自行抓包 电脑或者手机都可以
-    3.实在都不会
-3.cookie食用方式: 可以只保留P00001=xxx;中xxx的值 也可以整段都要 青龙运行可新建并放入到环境变量 iqy_ck 中 也可以直接填写在本脚本中
+3.实在都不会
+	3.cookie食用方式: 可以只保留P00001=xxx;中xxx的值 也可以整段都要 青龙运行可新建并放入到环境变量 aqiyi 中 也可以直接填写在本脚本中
 4.关于dfp
     1.dfp相当于爱奇艺的浏览器指纹 不需要登录也会有 有效期非常长 实测半年多前的还能用 其中领取每日任务的奖励和刷观影时长都需要使用到
     2.dfp目前本脚本写死了一个 但是多用户使用同一个不知道有没有风险
-    3.建议有能力的自己抓包 在cookie里的__dfp字段 然后环境变量新增 iqiyi_dfp 填入 或者在本脚本内写死
-    4.不会自己抓的话 请打开设置环境变量 get_iqiyi_dfp 为 True 再执行脚本会获得并输出到面板 请复制后按上一条填入环境变量 获取完请删除get_iqiyi_dfp环境变量 小鸡经不起操
+    3.建议有能力的自己抓包 在cookie里的__dfp字段 然后环境变量新增 iqiyidfp 填入 或者在本脚本内写死
+    4.不会自己抓的话 请打开设置环境变量 get_iqiyidfp 为 True 再执行脚本会获得并输出到面板 请复制后按上一条填入环境变量 获取完请删除get_iqiyidfp环境变量 小鸡经不起操
     5.get请求 没携带任何东西出去 开源脚本 请不要说什么提交什么东西到我服务器
 5.库中有每月自动领取爱奇艺会员天数红包的脚本 可配合使用(需有高等级的运行脚本提供红包 其它人才可以领取)
+
+变量名：aqiyi   变量值：P00001&__dfp   &分割
 """
-cookie = "fceI8wY8ZoEHNm2VeVy3VwNFzyQwSDpxUYwXInWVhLpYm2BGim1oTum1GN3cpuovl4Cy3Ufc"
-iqiyi_dfp = "a102f0870814c14c2a9619df08419b633e09f421c754860b9bb9a83ea28e0d08ba"
+import os
 from time import sleep, time
 from random import randint, choice
 from json import dumps
@@ -28,6 +29,16 @@ from string import digits, ascii_lowercase, ascii_uppercase
 from sys import exit, stdout
 from os import environ, system
 from re import findall
+
+aqiyi = os.getenv('aqiyi')
+
+if not aqiyi:
+    print("请设置环境变量 aqiyi")
+    exit(1)
+cookie,iqiyidfp = aqiyi.split('&')
+
+cookie = cookie
+iqiyidfp = iqiyidfp
 
 try:
     from requests import Session, get, post
@@ -39,23 +50,23 @@ except:
     system("pip3 install requests")
     print("安装完成 脚本退出 请重新执行")
     exit(0)
-iqy_ck = environ.get("iqy_ck") if environ.get("iqy_ck") else cookie
-get_iqiyi_dfp = environ.get("get_iqiyi_dfp") if environ.get("get_iqiyi_dfp") else False
+iqyck = environ.get("iqyck") if environ.get("iqyck") else cookie
+get_iqiyidfp = environ.get("get_iqiyidfp") if environ.get("get_iqiyidfp") else False
 pushplus_token = environ.get("PUSH_PLUS_TOKEN") if environ.get("PUSH_PLUS_TOKEN") else ""
 tgbot_token = environ.get("TG_BOT_TOKEN") if environ.get("TG_BOT_TOKEN") else ""
 tg_userId = environ.get("TG_USER_ID") if environ.get("TG_USER_ID") else ""
 tg_push_api = environ.get("TG_API_HOST") if environ.get("TG_API_HOST") else ""
-if iqy_ck == "":
-    print("未填写cookie 青龙可在环境变量设置 iqy_ck 或者在本脚本文件上方将获取到的cookie填入cookie中")
+if iqyck == "":
+    print("未填写cookie 青龙可在环境变量设置 aqiyi 或者在本脚本文件上方将获取到的cookie填入cookie中")
     exit(0)
-if "__dfp" in iqy_ck:
-    iqiyi_dfp = findall(r"__dfp=(.*?)(;|$)", iqy_ck)[0][0]
-    iqiyi_dfp = iqiyi_dfp.split("@")[0]
-if "P00001" in iqy_ck:
-    iqy_ck = findall(r"P00001=(.*?)(;|$)", iqy_ck)[0][0]
-if iqiyi_dfp == "":
-    iqiyi_dfp = environ.get("iqiyi_dfp") if environ.get(
-        "iqiyi_dfp") else "a18af56a9b6a224272ab8ed00d1a587078cd5c8ab119b2a4a689d5a22f06bcbd8b"
+if "__dfp" in iqyck:
+    iqiyidfp = findall(r"__dfp=(.*?)(;|$)", iqyck)[0][0]
+    iqiyidfp = iqiyidfp.split("@")[0]
+if "P00001" in iqyck:
+    iqyck = findall(r"P00001=(.*?)(;|$)", iqyck)[0][0]
+if iqiyidfp == "":
+    iqiyidfp = environ.get("iqiyidfp") if environ.get(
+        "iqiyidfp") else "a18af56a9b6a224272ab8ed00d1a587078cd5c8ab119b2a4a689d5a22f06bcbd8b"
 
 
 class Iqiyi:
@@ -329,7 +340,7 @@ class Iqiyi:
                 break
 
     def main(self):
-        if get_iqiyi_dfp:
+        if get_iqiyidfp:
             self.get_dfp()
         self.getUid()
         self.get_sign()
@@ -341,9 +352,9 @@ class Iqiyi:
             sleep(3)
         self.sign()
         self.dailyTask()
-        self.print_now(f"任务已经执行完成, 因爱奇艺观影时间同步较慢,这里等待3分钟再查询今日成长值信息,若不需要等待直接查询,请设置环境变量名 sleep_await = 0 默认为等待")
+        self.print_now(f"任务已经执行完成, 因爱奇艺观影时间同步较慢,这里等待1分钟再查询今日成长值信息,若不需要等待直接查询,请设置环境变量名 sleep_await = 0 默认为等待")
         if int(self.sleep_await) == 1:
-            sleep(180)
+            sleep(60)
         self.get_userinfo()
         if pushplus_token != "":
             self.pushplus("爱奇艺每日任务签到", self.user_info)
@@ -352,5 +363,5 @@ class Iqiyi:
 
 
 if __name__ == '__main__':
-    iqiyi = Iqiyi(iqy_ck, iqiyi_dfp)
+    iqiyi = Iqiyi(iqyck, iqiyidfp)
     iqiyi.main()
