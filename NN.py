@@ -79,7 +79,8 @@ def login(phone, passwd):
                     sleep(0)
                     pass
                     
-        find_user_point_url = 'https://opapi.nnraytheon.com/nn-assist/taskPoints/findUserPoint/168222391'
+        find_user_point_url = f"https://opapi.nnraytheon.com/nn-assist/taskPoints/findUserPoint/{login_status['retData']['userId']}"
+
         headers['content-length'] = '0'
         response = requests.post(url=find_user_point_url, headers=headers).json()
         user_point = response['retData']['point']
