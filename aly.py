@@ -2,8 +2,8 @@
 """
 1 0 * * * 
 new Env('阿里云签到');
-获取token : https://alist.nn.ci/zh/guide/drivers/aliyundrive.html
-环境变量：ali_ck    多账户#隔开
+#获取token : https://alist.nn.ci/zh/guide/drivers/aliyundrive.html
+#环境变量：ali_ck    多账户#隔开
 """
 
 import requests
