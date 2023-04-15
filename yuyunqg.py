@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-cron: 59 59 19 * * ? *
+cron: 59 59 19 * * *
 new Env('雨云抢机子');
 """
 import requests
