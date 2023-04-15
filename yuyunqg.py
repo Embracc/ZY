@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-cron: 58 59 19 * * *
+cron: 57 59 19 * * *
 new Env('雨云抢机子');
 """
 
@@ -18,12 +18,12 @@ headers = {
     'content-type': "application/json"
 }
 
-for i in range(5):
+for i in range(20):
     conn.request("POST", "/user/reward/items", payload, headers)
     res = conn.getresponse()
     data = res.read()
     print(data.decode("utf-8"))
 
     # 等待20毫秒
-    time.sleep(0.01)
+    ＃time.sleep(0.01)
 
