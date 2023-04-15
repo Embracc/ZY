@@ -17,6 +17,6 @@ headers = {
 
 items_url = "https://api.v2.rainyun.cc:36688/user/reward/items"
 
-data = {"item_id": 107}
+data = {"item_id": 107} #香港机
 response = requests.post(url=items_url, headers=headers, json=data)
 print(response.text)
