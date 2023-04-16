@@ -25,5 +25,5 @@ for i in range(20):
     print(data.decode("utf-8"))
 
     # 等待20毫秒
-    ＃time.sleep(0.01)
+    #time.sleep(0.01)
 
